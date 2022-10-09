@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/rooms")
@@ -34,12 +33,12 @@ public class RoomController {
     public ModelAndView addRoom() {
         Map<String, Object> model = new HashMap<>();
         model.put("room", new Room("", ""));
-        return new ModelAndView("rooms/add", model);
+        return new ModelAndView("rooms/edit", model);
     }
 
     @RequestMapping("/edit")
     public ModelAndView editRoom(@RequestParam Long roomId) {
-        Optional<Room> room = roomRepository.findById(roomId);
+        Room room = roomRepository.findById(roomId).get();
         Map<String, Object> model = new HashMap<>();
         model.put("room", room);
         return new ModelAndView("rooms/edit", model);
@@ -50,7 +49,7 @@ public class RoomController {
         if (bindingResult.hasErrors()) {
             Map<String, Object> model = new HashMap<>();
             model.put("room", room);
-            return new ModelAndView("rooms/save", model);
+            return new ModelAndView("rooms/edit", model);
         }
          roomRepository.save(room);
         return "redirect:/rooms";

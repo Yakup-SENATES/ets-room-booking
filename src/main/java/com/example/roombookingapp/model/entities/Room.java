@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "rooms")
 public class Room {
 
     @Id
@@ -22,8 +23,8 @@ public class Room {
     private String location;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<LayoutCapacity> capacities;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<LayoutCapacity> capacities ;
 
     public Room(String name, String location) {
         this.name = name;
@@ -36,6 +37,14 @@ public class Room {
     }
 
     public Room() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

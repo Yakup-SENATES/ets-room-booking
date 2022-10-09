@@ -4,6 +4,7 @@ import com.example.roombookingapp.model.entities.User;
 import com.example.roombookingapp.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,12 +31,12 @@ public class UserController {
 
     @RequestMapping("/add")
     public ModelAndView addUser() {
-        return new ModelAndView("users/add", "user", new User());
+        return new ModelAndView("users/edit", "user", new User());
     }
 
     @RequestMapping("/edit")
-    public ModelAndView editUser(@RequestParam("id") Long id) {
-        User user = userRepository.findById(id).orElseThrow();
+    public ModelAndView editUser(@RequestParam Long userId){
+        User user = userRepository.findById(userId).get();
         return new ModelAndView("users/edit", "user", user);
     }
 
@@ -50,14 +51,14 @@ public class UserController {
     }
 
     @RequestMapping("/delete")
-    public String deleteUser(@RequestParam("id") Long id) {
-        userRepository.deleteById(id);
+    public String deleteUser(@RequestParam Long userId) {
+        userRepository.deleteById(userId);
         return "redirect:/users";
     }
 
-    @RequestMapping("/resetPassword")
-    public String resetUserPass(@RequestParam("id") Long id) {
-        User user = userRepository.findById(id).orElseThrow();
+    @RequestMapping("/resetPW")
+    public String resetUserPass(@RequestParam Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
         user.setPassword("secret");
         userRepository.save(user);
         return "redirect:/users";
